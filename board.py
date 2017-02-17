@@ -1,4 +1,5 @@
 from colorama import init, Fore, Back, Style
+import common
 init()
 
 class Board(object):
@@ -114,3 +115,16 @@ class Board(object):
             self.cells[row][column] = self.chr_hit
         else:
             self.cells[row][column] = self.chr_miss
+
+    def getNextTargetCell(self):
+        # Find last hit cell address and find if there is any blank neighbour cells to it
+        cellAddress = common.randomCell()
+        for r in range(self.size):
+            for c in range(self.size):
+                if self.cells[r][c] == self.chr_hit:
+                    targets = [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]]
+
+                    for i in range(4):
+                        if self.isValidCellAddress(self.encode(targets[i][0], targets[i][1])) and self.canShootCell(self.encode(targets[i][0], targets[i][1])):
+                            return targets[i]
+        return cellAddress

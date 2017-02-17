@@ -77,5 +77,8 @@ class User(object):
         return won
 
     def findTargetCell(self):
-        return common.randomCell()
-        
+        if self.easy:
+            return common.randomCell()
+        else:
+            cell = self.trackingBoard.getNextTargetCell()
+            return cell
