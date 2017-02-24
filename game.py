@@ -51,7 +51,10 @@ class Game(object):
                 break
 
             self.printRoundMessage(activePlayer, messageBoard)
-        raw_input('Press Enter To Go To Main Menu...')
+        while True:
+            ok = raw_input('Type "OK" To Go To Main Menu...')
+            if ok.upper() == 'OK':
+                break
 
     def printRoundMessage(self, player, message):
         # Check if both of players are bots

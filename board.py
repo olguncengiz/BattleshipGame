@@ -117,14 +117,34 @@ class Board(object):
             self.cells[row][column] = self.chr_miss
 
     def getNextTargetCell(self):
-        # Find last hit cell address and find if there is any blank neighbour cells to it
-        cellAddress = common.randomCell()
+        # Find any hits on the board
         for r in range(self.size):
             for c in range(self.size):
                 if self.cells[r][c] == self.chr_hit:
-                    targets = [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]]
+                    targets = [[r - 1, c], [r, c - 1], [r + 1, c], [r, c + 1]]
 
-                    for i in range(4):
-                        if self.isValidCellAddress(self.encode(targets[i][0], targets[i][1])) and self.canShootCell(self.encode(targets[i][0], targets[i][1])):
+                    for i in range(len(targets)):
+                        cell = self.encode(targets[i][0], targets[i][1])
+                        if self.isValidCellAddress(cell) and self.canShootCell(cell):
                             return targets[i]
+        
+        tries = 0
+        while tries < 10:
+            cellAddress = common.randomCell
+            cell = self.encode(r, c)
+            if self.getCellValue(cell) == self.chr_blank:
+                targets = [[r - 1, c], [r, c - 1], [r + 1, c], [r, c + 1]]
+
+                allEmpty = True
+                for i in range(len(targets)):
+                    neighborCell = self.encode(targets[i][0], targets[i][1])
+                    if self.isValidCellAddress(neighborCell):
+                        if not self.canShootCell(neighborCell):
+                            allEmpty = False
+                            break
+                if allEmpty:
+                    return self.decode(cell)
+            tries += 1
+        
+        cellAddress = common.randomCell() 
         return cellAddress
